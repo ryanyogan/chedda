@@ -1,19 +1,12 @@
 {
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1720110094816,
-      "tag": "0000_nervous_doctor_octopus",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1720110542806,
-      "tag": "0001_fancy_hiroim",
+      "version": "7",
+      "when": 1720111018932,
+      "tag": "0000_tidy_photon",
       "breakpoints": true
     }
   ]
