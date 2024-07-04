@@ -47,8 +47,6 @@ export function Navigation() {
   let isMobile = useMedia("(max-width: 1024px)", false);
   let pathname = usePathname();
 
-  console.log("isMobile", isMobile);
-
   let onClick = (href: string) => {
     router.push(href);
     setIsOpen(false);
