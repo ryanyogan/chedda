@@ -13,7 +13,7 @@ import { Actions } from "./actions";
 export type ResponseType = InferResponseType<
   typeof client.api.accounts.$get,
   200
->["data"][0];
+>["data"][number];
 
 export const columns: ColumnDef<ResponseType>[] = [
   {
