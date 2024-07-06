@@ -3,8 +3,9 @@ import { accounts, insertAccountSchema } from "@/db/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { createId } from "@paralleldrive/cuid2";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { Hono } from "hono";
+import { z } from "zod";
 
 let accountsApi = new Hono()
   .get("/", clerkMiddleware(), async (ctx) => {
@@ -45,6 +46,41 @@ let accountsApi = new Hono()
           ...values,
         })
         .returning();
+
+      return ctx.json({ data });
+    }
+  )
+  .delete(
+    "/:id",
+    clerkMiddleware(),
+    zValidator(
+      "param",
+      z.object({
+        id: z.string().optional(),
+      })
+    ),
+    async (ctx) => {
+      let auth = getAuth(ctx);
+      let { id } = ctx.req.valid("param");
+
+      if (!id) {
+        return ctx.json({ error: "Missing id" }, 400);
+      }
+
+      if (!auth?.userId) {
+        return ctx.json({ error: "Unauthorized" }, 401);
+      }
+
+      let [data] = await db
+        .delete(accounts)
+        .where(and(eq(accounts.userId, auth.userId), eq(accounts.id, id)))
+        .returning({
+          id: accounts.id,
+        });
+
+      if (!data) {
+        return ctx.json({ error: "Not found" }, 404);
+      }
 
       return ctx.json({ data });
     }

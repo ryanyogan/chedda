@@ -1,9 +1,11 @@
 "use client";
 
+import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNewAccount } from "@/features/accounts/hooks/use-new-account";
 import { Plus } from "lucide-react";
+import { columns } from "./columns";
 
 export default function AccountsPage() {
   let newAccount = useNewAccount();
@@ -18,6 +20,17 @@ export default function AccountsPage() {
             Add new
           </Button>
         </CardHeader>
+        <CardContent>
+          <DataTable
+            onDelete={() => {}}
+            filterKey="name"
+            data={[
+              { id: "1", name: "Account 1" },
+              { id: "2", name: "Account 2" },
+            ]}
+            columns={columns}
+          />
+        </CardContent>
       </Card>
     </div>
   );
