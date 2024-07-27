@@ -4,12 +4,13 @@ import { db } from "@/db/drizzle";
 import { accounts } from "@/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 // TODO: Move to actions, leverage auth middleware chain
 export async function getAccounts() {
   let auth = await currentUser();
   if (!auth?.id) {
-    throw new Error("Unauthorized");
+    redirect("/sign-in");
   }
 
   let data = await db
@@ -30,7 +31,7 @@ export async function getAccount(id?: string) {
 
   let auth = await currentUser();
   if (!auth?.id) {
-    throw new Error("Unauthorized");
+    redirect("/sign-in");
   }
 
   let [data] = await db
