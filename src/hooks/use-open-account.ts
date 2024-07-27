@@ -1,6 +1,8 @@
 import { getAccount } from "@/app/(dashboard)/accounts/queries";
 import { create } from "zustand";
 
+//TODO: Refactor all state into a single provider for the sheet components
+
 type OpenAccountState = {
   id?: string;
   account?: { id: string; name: string };
