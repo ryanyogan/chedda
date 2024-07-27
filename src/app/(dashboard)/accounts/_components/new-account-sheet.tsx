@@ -1,3 +1,6 @@
+"use client";
+
+import { createAccount } from "@/app/(dashboard)/accounts/actions";
 import {
   Sheet,
   SheetContent,
@@ -6,26 +9,28 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { insertAccountSchema } from "@/db/schema";
+import { useNewAccount } from "@/hooks/use-new-account";
+import { toast } from "sonner";
 import { z } from "zod";
-import { useCreateAccount } from "../api/use-create-account";
-import { useNewAccount } from "../hooks/use-new-account";
+import { useServerAction } from "zsa-react";
 import { AccountForm } from "./account-form";
 
 export function NewAccountSheet() {
   let { isOpen, onClose } = useNewAccount();
-  let { mutate, isPending } = useCreateAccount();
+  const { isPending, execute, isSuccess } = useServerAction(createAccount);
 
   let formSchema = insertAccountSchema.pick({
     name: true,
   });
-  type FormValues = z.input<typeof formSchema>;
 
-  function onSubmit(values: FormValues) {
-    mutate(values, {
-      onSuccess: () => {
-        onClose();
-      },
-    });
+  async function onSubmit(values: z.input<typeof formSchema>) {
+    await execute({ name: values.name });
+
+    if (isSuccess && !isPending) {
+      toast.success("Account created successfully");
+    }
+
+    onClose();
   }
 
   return (
@@ -43,6 +48,7 @@ export function NewAccountSheet() {
           }}
           onSubmit={onSubmit}
           disabled={isPending}
+          isPending={isPending}
         />
       </SheetContent>
     </Sheet>

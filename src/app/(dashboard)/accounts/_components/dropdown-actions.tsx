@@ -9,9 +9,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDeleteAccount } from "@/features/accounts/api/use-delete-account";
-import { useOpenAccount } from "@/features/accounts/hooks/use-open-account";
 import { useConfirm } from "@/hooks/use-confirm";
+import { useOpenAccount } from "@/hooks/use-open-account";
+import { useServerAction } from "zsa-react";
+import { deleteAccount } from "../actions";
 
 type Props = {
   id: string;
@@ -22,15 +23,15 @@ export const Actions = ({ id }: Props) => {
     "Are you sure?",
     "You are about to delete this account."
   );
-
-  const deleteMutation = useDeleteAccount(id);
   const { onOpen } = useOpenAccount();
+
+  const { isPending, execute } = useServerAction(deleteAccount);
 
   const handleDelete = async () => {
     const ok = await confirm();
 
     if (ok) {
-      deleteMutation.mutate();
+      await execute({ id });
     }
   };
 
@@ -44,17 +45,11 @@ export const Actions = ({ id }: Props) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            disabled={deleteMutation.isPending}
-            onClick={() => onOpen(id)}
-          >
+          <DropdownMenuItem disabled={isPending} onClick={() => onOpen(id)}>
             <Edit className="size-4 mr-2" />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={deleteMutation.isPending}
-            onClick={handleDelete}
-          >
+          <DropdownMenuItem disabled={isPending} onClick={handleDelete}>
             <Trash className="size-4 mr-2" />
             Delete
           </DropdownMenuItem>

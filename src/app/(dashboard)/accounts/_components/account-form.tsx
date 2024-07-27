@@ -25,6 +25,7 @@ type Props = {
   onSubmit: (values: FormValues) => void;
   onDelete?: () => void;
   disabled?: boolean;
+  isPending?: boolean;
 };
 
 export function AccountForm({
@@ -33,6 +34,7 @@ export function AccountForm({
   onSubmit,
   onDelete,
   disabled,
+  isPending,
 }: Props) {
   let form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -71,7 +73,7 @@ export function AccountForm({
         />
 
         <Button className="w-full" disabled={disabled}>
-          {id ? "Save Changes" : "Create Account"}
+          {isPending ? "Saving..." : "Save"}
         </Button>
 
         {!!id && (

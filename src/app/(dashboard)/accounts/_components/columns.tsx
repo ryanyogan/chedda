@@ -1,21 +1,13 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { InferResponseType } from "hono";
 import { ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { client } from "@/lib/hono";
+import { Actions } from "./dropdown-actions";
 
-import { Actions } from "./actions";
-
-export type ResponseType = InferResponseType<
-  typeof client.api.accounts.$get,
-  200
->["data"][number];
-
-export const columns: ColumnDef<ResponseType>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     id: "select",
     header: ({ table }) => (

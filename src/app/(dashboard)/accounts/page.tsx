@@ -1,60 +1,21 @@
-"use client";
-
-import { DataTable } from "@/components/data-table";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useBulkDeleteAccounts } from "@/features/accounts/api/use-bulk-delete";
-import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
-import { useNewAccount } from "@/features/accounts/hooks/use-new-account";
-import { Loader2, Plus } from "lucide-react";
-import { columns } from "./columns";
+import { AddAccountButton } from "./_components/add-account-button";
+import { columns } from "./_components/columns";
+import { AccountsTable } from "./_components/table";
+import { getAccounts } from "./queries";
 
-export default function AccountsPage() {
-  let newAccount = useNewAccount();
-  let deleteAccounts = useBulkDeleteAccounts();
-  let accountsQuery = useGetAccounts();
-  let accounts = accountsQuery.data || [];
-  let isDisabled = accountsQuery.isLoading || deleteAccounts.isPending;
-
-  if (accountsQuery.isLoading) {
-    return (
-      <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
-        <Card className="border-none drop-shadow-sm">
-          <CardHeader>
-            <Skeleton className="h-8 w-48" />
-          </CardHeader>
-          <CardContent>
-            <div className="h-[500px] w-full flex items-center justify-center">
-              <Loader2 className="size-6 text-slate-300 animate-spin" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+export default async function AccountsPage() {
+  let { data: accounts } = await getAccounts();
 
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
       <Card className="border-none drop-shadow-sm">
         <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
           <CardTitle className="text-xl line-clamp-1">Accounts Page</CardTitle>
-          <Button onClick={newAccount.onOpen} size="sm">
-            <Plus className="size-4 mr-2" />
-            Add new
-          </Button>
+          <AddAccountButton />
         </CardHeader>
         <CardContent>
-          <DataTable
-            onDelete={(row) => {
-              let ids = row.map((r) => r.original.id);
-              deleteAccounts.mutate({ ids });
-            }}
-            filterKey="name"
-            disabled={isDisabled}
-            data={accounts}
-            columns={columns}
-          />
+          <AccountsTable columns={columns} accounts={accounts} />
         </CardContent>
       </Card>
     </div>
