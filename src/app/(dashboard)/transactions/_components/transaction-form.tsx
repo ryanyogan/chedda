@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { insertTrasnactionSchema } from "@/db/schema";
+import { insertTransactionSchema } from "@/db/schema";
 import { convertAmountToMiliunits } from "@/lib/utils";
 import { AmountInput } from "./amount-input";
 import { DatePicker } from "./date-picker";
@@ -28,7 +28,7 @@ const formSchema = z.object({
   notes: z.string().nullable().optional(),
 });
 
-const apiSchema = insertTrasnactionSchema.omit({
+const apiSchema = insertTransactionSchema.omit({
   id: true,
 });
 

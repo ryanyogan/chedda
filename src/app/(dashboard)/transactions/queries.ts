@@ -26,7 +26,7 @@ export async function getTransactions({
   const startDate = from ? parse(from, "yyyy-MM-dd", new Date()) : defaultFrom;
   const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
 
-  let data = await db
+  const data = await db
     .select({
       id: transactions.id,
       date: transactions.date,
@@ -40,7 +40,7 @@ export async function getTransactions({
     })
     .from(transactions)
     .innerJoin(accounts, eq(transactions.accountId, accounts.id))
-    .leftJoin(categories, eq(transactions.categoryId, categories.id))
+    .innerJoin(categories, eq(transactions.categoryId, categories.id))
     .where(
       and(
         accountId ? eq(transactions.accountId, accountId) : undefined,

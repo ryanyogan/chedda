@@ -6,6 +6,9 @@ import { currentUser } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
+
+export type Account = Awaited<ReturnType<typeof getAccounts>>["data"][number];
+
 // TODO: Move to actions, leverage auth middleware chain
 export async function getAccounts() {
   let auth = await currentUser();

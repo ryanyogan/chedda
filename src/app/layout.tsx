@@ -1,4 +1,3 @@
-import ReactQueryProvider from "@/providers/react-query";
 import { SheetProvider } from "@/providers/sheet-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
@@ -22,11 +21,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
-          <ReactQueryProvider>
-            <SheetProvider />
-            <Toaster />
-            {children}
-          </ReactQueryProvider>
+          <SheetProvider />
+          <Toaster />
+          {children}
         </body>
       </html>
     </ClerkProvider>

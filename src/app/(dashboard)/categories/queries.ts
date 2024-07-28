@@ -22,3 +22,7 @@ export async function getCategories() {
 
   return { data };
 }
+
+export type Category = Awaited<
+  ReturnType<typeof getCategories>
+>["data"][number];
