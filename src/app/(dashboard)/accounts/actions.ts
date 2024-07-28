@@ -89,3 +89,22 @@ export const editAccount = authedProcedure
 
     revalidatePath("/accounts");
   });
+
+export let getAccount = authedProcedure
+  .createServerAction()
+  .input(z.object({ id: z.string() }))
+  .handler(async ({ ctx, input }) => {
+    if (!input.id) {
+      throw new Error("Account id is required");
+    }
+
+    let [data] = await db
+      .select({
+        id: accounts.id,
+        name: accounts.name,
+      })
+      .from(accounts)
+      .where(and(eq(accounts.id, input.id), eq(accounts.userId, ctx.auth.id)));
+
+    return { data };
+  });

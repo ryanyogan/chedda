@@ -3,6 +3,7 @@
 import { EditAccountSheet } from "@/app/(dashboard)/accounts/_components/edit-account";
 import { NewAccountSheet } from "@/app/(dashboard)/accounts/_components/new-account-sheet";
 import { NewCategorySheet } from "@/app/(dashboard)/categories/new-category-sheet";
+import { NewTransactionSheet } from "@/app/(dashboard)/transactions/_components/new-transaction-sheet";
 import { useMountedState } from "react-use";
 
 // TODO: Refactor this into one single sheet provider
@@ -19,6 +20,7 @@ export function SheetProvider() {
       <NewAccountSheet />
       <EditAccountSheet />
       <NewCategorySheet />
+      <NewTransactionSheet />
     </>
   );
 }

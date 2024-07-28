@@ -4,11 +4,12 @@ import { db } from "@/db/drizzle";
 import { categories } from "@/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 export async function getCategories() {
   const user = await currentUser();
   if (!user?.id) {
-    return { error: "Unauthorized" };
+    redirect("/sign-in");
   }
 
   let data = await db
