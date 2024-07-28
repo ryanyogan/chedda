@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { insertTransactionSchema } from "@/db/schema";
 import { useNewTransaction } from "@/hooks/use-new-transaction";
-import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { z } from "zod";
 import { useServerAction } from "zsa-react";
 import { createAccount } from "../../accounts/actions";
@@ -41,20 +41,20 @@ export function NewTransactionSheet({
   let { execute: executeAccount, isPending: isPendingAccount } =
     useServerAction(createAccount);
 
-  const onCreateCategory = (name: string) => {};
-  // categoryMutation.mutate({
-  //   name,
-  // });
+  const onCreateCategory = async (name: string) => {
+    await ececuteCategory({ name });
+    toast("Category created successfully");
+  };
 
   const categoryOptions = (categories ?? []).map((category) => ({
     label: category.name,
     value: category.id,
   }));
 
-  const onCreateAccount = (name: string) => {};
-  // accountMutation.mutate({
-  //   name,
-  // });
+  const onCreateAccount = async (name: string) => {
+    await executeAccount({ name });
+    toast("Account created successfully");
+  };
 
   const accountOptions = (accounts ?? []).map((account) => ({
     label: account.name,
@@ -66,6 +66,8 @@ export function NewTransactionSheet({
     onClose();
   };
 
+  let isPending = false;
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="space-y-4">
@@ -73,20 +75,14 @@ export function NewTransactionSheet({
           <SheetTitle>New Transaction</SheetTitle>
           <SheetDescription>Add a new transaction</SheetDescription>
         </SheetHeader>
-        {false ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Loader2 className="size-4 text-muted-foreground animate-spin" />
-          </div>
-        ) : (
-          <TransactionForm
-            onSubmit={onSubmit}
-            disabled={false}
-            categoryOptions={categoryOptions}
-            onCreateCategory={onCreateCategory}
-            accountOptions={accountOptions}
-            onCreateAccount={onCreateAccount}
-          />
-        )}
+        <TransactionForm
+          onSubmit={onSubmit}
+          disabled={isPending}
+          categoryOptions={categoryOptions}
+          onCreateCategory={onCreateCategory}
+          accountOptions={accountOptions}
+          onCreateAccount={onCreateAccount}
+        />
       </SheetContent>
     </Sheet>
   );
