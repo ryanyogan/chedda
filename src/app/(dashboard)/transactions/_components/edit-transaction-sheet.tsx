@@ -114,8 +114,8 @@ export function EditTransactionSheet({
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="space-y-4">
         <SheetHeader>
-          <SheetTitle>New Transaction</SheetTitle>
-          <SheetDescription>Add a new transaction</SheetDescription>
+          <SheetTitle>Edit Transaction</SheetTitle>
+          <SheetDescription>Edit your transaction</SheetDescription>
         </SheetHeader>
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -123,10 +123,11 @@ export function EditTransactionSheet({
           </div>
         ) : (
           <TransactionForm
+            isLoading={isPendingTransaction}
             id={id}
             onSubmit={onSubmit}
             defaultValues={defaultValues}
-            disabled={false}
+            disabled={isPendingTransaction}
             categoryOptions={categoryOptions}
             onCreateCategory={onCreateCategory}
             accountOptions={accountOptions}

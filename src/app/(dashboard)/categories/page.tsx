@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { columns } from "./columns";
-import { NewCategoryButton } from "./new-category-button";
+import { columns } from "./_components/columns";
+import { NewCategoryButton } from "./_components/new-category-button";
+import { CategoriesTable } from "./_components/table";
 import { getCategories } from "./queries";
-import { CategoriesTable } from "./table";
 
 export default async function CategoriesPage() {
   const { data: categories } = await getCategories();

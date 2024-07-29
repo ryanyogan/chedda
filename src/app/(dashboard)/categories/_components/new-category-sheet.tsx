@@ -11,7 +11,7 @@ import { insertCategorySchema } from "@/db/schema";
 import { useNewCategory } from "@/hooks/use-new-category";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
-import { createCategory } from "./actions";
+import { createCategory } from "../actions";
 import { CategoryForm } from "./category-form";
 
 const formSchema = insertCategorySchema.pick({

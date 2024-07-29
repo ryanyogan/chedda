@@ -45,6 +45,7 @@ type Props = {
   categoryOptions: { label: string; value: string }[];
   onCreateAccount: (name: string) => void;
   onCreateCategory: (name: string) => void;
+  isLoading?: boolean;
 };
 
 export const TransactionForm = ({
@@ -57,6 +58,7 @@ export const TransactionForm = ({
   categoryOptions,
   onCreateAccount,
   onCreateCategory,
+  isLoading,
 }: Props) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -186,7 +188,7 @@ export const TransactionForm = ({
           )}
         />
         <Button className="w-full" disabled={disabled}>
-          {id ? "Save changes" : "Create transaction"}
+          {isLoading ? "Saving..." : "Save transaction"}
         </Button>
         {!!id && (
           <Button

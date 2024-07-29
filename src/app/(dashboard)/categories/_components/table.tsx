@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/data-table";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
-import { bulkDelete } from "./actions";
+import { bulkDelete } from "../actions";
 
 export function CategoriesTable({
   categories,

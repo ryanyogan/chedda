@@ -76,6 +76,7 @@ export function NewTransactionSheet({
           <SheetDescription>Add a new transaction</SheetDescription>
         </SheetHeader>
         <TransactionForm
+          isLoading={isPendingTransaction}
           onSubmit={onSubmit}
           disabled={isPending}
           categoryOptions={categoryOptions}
