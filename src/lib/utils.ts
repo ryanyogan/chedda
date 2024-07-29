@@ -14,9 +14,9 @@ export function formatCurrency(value: number) {
 }
 
 export function convertAmountFromMiliunits(amount: number) {
-  return amount / 1000;
+  return amount / 10;
 }
 
 export function convertAmountToMiliunits(amount: number) {
-  return Math.round(amount * 1000);
+  return Math.round(amount * 10);
 }

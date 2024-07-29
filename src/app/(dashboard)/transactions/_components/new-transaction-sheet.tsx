@@ -66,7 +66,7 @@ export function NewTransactionSheet({
     onClose();
   };
 
-  let isPending = false;
+  let isPending = isPendingTransaction;
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>

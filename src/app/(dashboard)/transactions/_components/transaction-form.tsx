@@ -14,7 +14,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { insertTransactionSchema } from "@/db/schema";
-import { convertAmountToMiliunits } from "@/lib/utils";
 import { AmountInput } from "./amount-input";
 import { DatePicker } from "./date-picker";
 import { Select } from "./select";
@@ -67,11 +66,10 @@ export const TransactionForm = ({
 
   const handleSubmit = (values: FormValues) => {
     const amount = parseFloat(values.amount);
-    const amountInMiliunits = convertAmountToMiliunits(amount);
 
     onSubmit({
       ...values,
-      amount: amountInMiliunits,
+      amount,
     });
   };
 

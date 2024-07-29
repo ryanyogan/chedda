@@ -18,7 +18,7 @@ import { createAccount } from "../../accounts/actions";
 import { Account } from "../../accounts/queries";
 import { createCategory } from "../../categories/actions";
 import { Category } from "../../categories/queries";
-import { createTransaction } from "../actions";
+import { updateTransaction } from "../actions";
 import { getTransaction } from "../queries";
 import { TransactionForm } from "./transaction-form";
 
@@ -40,8 +40,11 @@ export function EditTransactionSheet({
   let [isLoading, setIsLoading] = useState(false);
   let [transaction, setTransaction] = useState<Transaction | null>(null);
 
-  let { execute: executeTransaction, isPending: isPendingTransaction } =
-    useServerAction(createTransaction);
+  let {
+    execute: executeTransaction,
+    isPending: isPendingTransaction,
+    error,
+  } = useServerAction(updateTransaction);
   let { execute: ececuteCategory, isPending: isPendingCategory } =
     useServerAction(createCategory);
   let { execute: executeAccount, isPending: isPendingAccount } =
@@ -84,7 +87,16 @@ export function EditTransactionSheet({
   }));
 
   const onSubmit = async (values: FormValues) => {
-    await executeTransaction(values);
+    if (!id) {
+      return;
+    }
+
+    let [_data, err] = await executeTransaction({ id, data: values });
+    if (err) {
+      console.error(err);
+      toast.error("Failed to update transaction");
+    }
+
     onClose();
   };
 
@@ -108,6 +120,10 @@ export function EditTransactionSheet({
 
   if (!id || !transaction) {
     return null;
+  }
+
+  {
+    error && console.log(error.fieldErrors);
   }
 
   return (
