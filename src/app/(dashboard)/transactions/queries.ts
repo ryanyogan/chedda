@@ -53,3 +53,28 @@ export async function getTransactions({
 
   return { data };
 }
+
+export async function getTransaction({ id }: { id: string }) {
+  let auth = await currentUser();
+  if (!auth?.id) {
+    throw new Error("Unauthorized");
+  }
+
+  const [data] = await db
+    .select({
+      id: transactions.id,
+      date: transactions.date,
+      categoryId: transactions.categoryId,
+      payee: transactions.payee,
+      amount: transactions.amount,
+      notes: transactions.notes,
+      accountId: transactions.accountId,
+    })
+    .from(transactions)
+    .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+    .where(and(eq(transactions.id, id), eq(accounts.userId, auth.id)));
+
+  console.log(data);
+
+  return { data };
+}

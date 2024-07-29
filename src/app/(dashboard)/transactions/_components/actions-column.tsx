@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useConfirm } from "@/hooks/use-confirm";
+import { useOpenTransaction } from "@/hooks/use-open-transaction";
 
 type Props = {
   id: string;
@@ -20,6 +21,8 @@ export const ActionsColumn = ({ id }: Props) => {
     "Are you sure?",
     "You are about to delete this transaction."
   );
+
+  let { onOpen } = useOpenTransaction();
 
   const handleDelete = async () => {
     const ok = await confirm();
@@ -39,7 +42,7 @@ export const ActionsColumn = ({ id }: Props) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem disabled={false} onClick={() => {}}>
+          <DropdownMenuItem disabled={false} onClick={() => onOpen(id)}>
             <Edit className="size-4 mr-2" />
             Edit
           </DropdownMenuItem>
