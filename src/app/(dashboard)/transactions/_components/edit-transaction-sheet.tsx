@@ -122,10 +122,6 @@ export function EditTransactionSheet({
     return null;
   }
 
-  {
-    error && console.log(error.fieldErrors);
-  }
-
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="space-y-4">

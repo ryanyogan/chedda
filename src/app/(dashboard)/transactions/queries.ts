@@ -40,7 +40,7 @@ export async function getTransactions({
     })
     .from(transactions)
     .innerJoin(accounts, eq(transactions.accountId, accounts.id))
-    .innerJoin(categories, eq(transactions.categoryId, categories.id))
+    .leftJoin(categories, eq(transactions.categoryId, categories.id))
     .where(
       and(
         accountId ? eq(transactions.accountId, accountId) : undefined,
@@ -73,8 +73,6 @@ export async function getTransaction({ id }: { id: string }) {
     .from(transactions)
     .innerJoin(accounts, eq(transactions.accountId, accounts.id))
     .where(and(eq(transactions.id, id), eq(accounts.userId, auth.id)));
-
-  console.log(data);
 
   return { data };
 }

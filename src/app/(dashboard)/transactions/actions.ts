@@ -27,15 +27,13 @@ export let createTransaction = authedProcedure
   .createServerAction()
   .input(insertTransactionSchema.omit({ id: true }))
   .handler(async ({ input, ctx }) => {
-    let [data] = await db
+    await db
       .insert(transactions)
       .values({
         id: createId(),
         ...input,
       })
       .returning();
-
-    console.log("Created transaction", data);
 
     revalidatePath("/transactions");
   });
@@ -63,8 +61,6 @@ export let updateTransaction = authedProcedure
         )
     );
 
-    console.log("Transaction to update query", transactionToUpdate);
-
     try {
       let [data] = await db
         .with(transactionToUpdate)
@@ -74,8 +70,6 @@ export let updateTransaction = authedProcedure
           inArray(transactions.id, sql`(select id from ${transactionToUpdate})`)
         )
         .returning();
-
-      console.log("Updated result", data);
 
       if (!data) {
         throw new Error("Transaction not found");
