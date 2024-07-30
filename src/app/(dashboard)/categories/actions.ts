@@ -36,6 +36,28 @@ export const createCategory = authedProcedure
     revalidatePath("/categories");
   });
 
+export const editCategory = authedProcedure
+  .createServerAction()
+  .input(insertCategorySchema.pick({ name: true, id: true }))
+  .handler(async ({ ctx, input }) => {
+    const [data] = await db
+      .update(categories)
+      .set({
+        name: input.name,
+      })
+      .where(
+        and(eq(categories.userId, ctx.auth.id), eq(categories.id, input.id))
+      )
+      .returning();
+
+    if (!data) {
+      throw new Error("Category not found");
+    }
+
+    revalidatePath("/categories");
+    // revalidatePath("/transactions")
+  });
+
 export const bulkDelete = authedProcedure
   .createServerAction()
   .input(z.object({ ids: z.array(z.string()) }))

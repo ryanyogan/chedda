@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useOpenCategory } from "@/hooks/use-open-category";
+import Link from "next/link";
 
 type Props = {
   id: string;
@@ -44,8 +45,10 @@ export const Actions = ({ id }: Props) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem disabled={false} onClick={() => onOpen(id)}>
-            <Edit className="size-4 mr-2" />
-            Edit
+            <Link href={`/categories/edit/${id}`} className="flex items-center">
+              <Edit className="size-4 mr-2" />
+              Edit
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem disabled={false} onClick={handleDelete}>
             <Trash className="size-4 mr-2" />

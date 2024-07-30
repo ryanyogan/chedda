@@ -1,7 +1,7 @@
 import { TriangleAlert } from "lucide-react";
 
-import { useOpenCategory } from "@/hooks/use-open-category";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 type Props = {
   id: string;
@@ -10,28 +10,21 @@ type Props = {
 };
 
 export const CategoryColumn = ({ id, category, categoryId }: Props) => {
-  const { onOpen: onOpenCategory } = useOpenCategory();
-  // const { onOpen: onOpenTransaction } = useOpenTransaction();
-
-  const onClick = () => {
-    if (categoryId) {
-      onOpenCategory(categoryId);
-    } else {
-      // onOpenTransaction(id);
-      console.log("onOpenTransaction", id);
-    }
-  };
+  const linkHref = categoryId
+    ? `/categories/edit/${categoryId}`
+    : "/transactions"; // TODO: // create another parallal route
 
   return (
-    <div
-      onClick={onClick}
-      className={cn(
-        "flex items-center cursor-pointer hover:underline",
-        !category && "text-rose-500"
-      )}
-    >
-      {!category && <TriangleAlert className="mr-2 size-4 shrink-0" />}
-      {category || "Uncategorized"}
-    </div>
+    <Link href={linkHref}>
+      <div
+        className={cn(
+          "flex items-center cursor-pointer hover:underline",
+          !category && "text-rose-500"
+        )}
+      >
+        {!category && <TriangleAlert className="mr-2 size-4 shrink-0" />}
+        {category || "Uncategorized"}
+      </div>
+    </Link>
   );
 };
