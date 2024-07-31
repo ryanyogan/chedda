@@ -8,7 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { insertAccountSchema } from "@/db/schema";
+import { insertBankAccountSchema } from "@/db/schema";
 import { useNewAccount } from "@/hooks/use-new-account";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -19,7 +19,7 @@ export function NewAccountSheet() {
   let { isOpen, onClose } = useNewAccount();
   const { isPending, execute, isSuccess } = useServerAction(createAccount);
 
-  let formSchema = insertAccountSchema.pick({
+  let formSchema = insertBankAccountSchema.pick({
     name: true,
   });
 

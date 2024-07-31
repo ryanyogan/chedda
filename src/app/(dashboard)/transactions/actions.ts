@@ -1,7 +1,11 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { accounts, insertTransactionSchema, transactions } from "@/db/schema";
+import {
+  bankAccounts,
+  insertTransactionSchema,
+  transactions,
+} from "@/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { createId } from "@paralleldrive/cuid2";
 import { and, eq, inArray, sql } from "drizzle-orm";
@@ -55,9 +59,12 @@ export let updateTransaction = authedProcedure
       db
         .select({ id: transactions.id })
         .from(transactions)
-        .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+        .innerJoin(bankAccounts, eq(transactions.accountId, bankAccounts.id))
         .where(
-          and(eq(transactions.id, input.id), eq(accounts.userId, ctx.auth.id))
+          and(
+            eq(transactions.id, input.id),
+            eq(bankAccounts.userId, ctx.auth.id)
+          )
         )
     );
 

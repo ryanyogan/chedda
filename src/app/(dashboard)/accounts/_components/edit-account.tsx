@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { insertAccountSchema } from "@/db/schema";
+import { insertBankAccountSchema } from "@/db/schema";
 import { useOpenAccount } from "@/hooks/use-open-account";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -28,7 +28,7 @@ export function EditAccountSheet() {
     return null;
   }
 
-  let formSchema = insertAccountSchema.pick({
+  let formSchema = insertBankAccountSchema.pick({
     name: true,
   });
 

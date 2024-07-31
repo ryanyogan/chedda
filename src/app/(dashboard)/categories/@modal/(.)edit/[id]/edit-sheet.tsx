@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { insertAccountSchema } from "@/db/schema";
+import { insertCategorySchema } from "@/db/schema";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -24,7 +24,7 @@ export function EditSheet(props: { category: { name: string; id: string } }) {
     return null;
   }
 
-  let formSchema = insertAccountSchema.pick({
+  let formSchema = insertCategorySchema.pick({
     name: true,
   });
 

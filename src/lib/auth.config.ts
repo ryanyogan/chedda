@@ -25,5 +25,36 @@ export default {
       },
     }),
   ],
-  callbacks: {},
+  callbacks: {
+    async jwt({ token, user, account }) {
+      token.user ??= user;
+      token.accessToken ??= account?.access_token;
+      token.refreshToken ??= account?.refresh_token;
+      token.expiresAt ??= (account?.expires_in ?? 0) * 1000;
+      token.error = undefined;
+
+      if (Date.now() < (token.expiresAt as number)) {
+        return token;
+      }
+
+      // TODO: refresh the token eh?
+      return token;
+    },
+
+    async session({ session, token: { user, error: tokenError } }) {
+      session.user = {
+        id: user?.id ?? "",
+        email: user?.email ?? "",
+        image: user?.image ?? "",
+        name: user?.name,
+        loginName: user?.name ?? "",
+        emailVerified: user?.emailVerified ?? false,
+        firstName: user?.firstName ?? "",
+        lastName: user?.lastName ?? "",
+      };
+      session.clientId = process.env.ZITADEL_CLIENT_ID as string;
+      session.error = tokenError;
+      return session;
+    },
+  },
 } satisfies NextAuthConfig;

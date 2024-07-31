@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { accounts, insertAccountSchema } from "@/db/schema";
+import { bankAccounts, insertBankAccountSchema } from "@/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { createId } from "@paralleldrive/cuid2";
 import { and, eq, inArray } from "drizzle-orm";
@@ -25,10 +25,10 @@ const authedProcedure = createServerActionProcedure().handler(async () => {
 
 export const createAccount = authedProcedure
   .createServerAction()
-  .input(insertAccountSchema.pick({ name: true }))
+  .input(insertBankAccountSchema.pick({ name: true }))
   .handler(async ({ ctx, input }) => {
     let [data] = await db
-      .insert(accounts)
+      .insert(bankAccounts)
       .values({
         id: createId(),
         name: input.name,
@@ -48,8 +48,10 @@ export const deleteAccount = authedProcedure
     }
 
     await db
-      .delete(accounts)
-      .where(and(eq(accounts.userId, ctx.auth.id), eq(accounts.id, input.id)));
+      .delete(bankAccounts)
+      .where(
+        and(eq(bankAccounts.userId, ctx.auth.id), eq(bankAccounts.id, input.id))
+      );
 
     revalidatePath("/accounts");
   });
@@ -59,9 +61,12 @@ export const bulkDelete = authedProcedure
   .input(z.object({ ids: z.array(z.string()) }))
   .handler(async ({ ctx, input }) => {
     await db
-      .delete(accounts)
+      .delete(bankAccounts)
       .where(
-        and(eq(accounts.userId, ctx.auth.id), inArray(accounts.id, input.ids))
+        and(
+          eq(bankAccounts.userId, ctx.auth.id),
+          inArray(bankAccounts.id, input.ids)
+        )
       );
 
     revalidatePath("/accounts");
@@ -78,9 +83,11 @@ export const editAccount = authedProcedure
     }
 
     let [data] = await db
-      .update(accounts)
+      .update(bankAccounts)
       .set({ name: input.name })
-      .where(and(eq(accounts.userId, ctx.auth.id), eq(accounts.id, input.id)))
+      .where(
+        and(eq(bankAccounts.userId, ctx.auth.id), eq(bankAccounts.id, input.id))
+      )
       .returning();
 
     if (!data) {
@@ -100,11 +107,13 @@ export let getAccount = authedProcedure
 
     let [data] = await db
       .select({
-        id: accounts.id,
-        name: accounts.name,
+        id: bankAccounts.id,
+        name: bankAccounts.name,
       })
-      .from(accounts)
-      .where(and(eq(accounts.id, input.id), eq(accounts.userId, ctx.auth.id)));
+      .from(bankAccounts)
+      .where(
+        and(eq(bankAccounts.id, input.id), eq(bankAccounts.userId, ctx.auth.id))
+      );
 
     return { data };
   });

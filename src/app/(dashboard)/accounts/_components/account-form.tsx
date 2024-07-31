@@ -7,13 +7,13 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { insertAccountSchema } from "@/db/schema";
+import { insertBankAccountSchema } from "@/db/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-let formSchema = insertAccountSchema.pick({
+let formSchema = insertBankAccountSchema.pick({
   name: true,
 });
 

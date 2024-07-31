@@ -1,13 +1,14 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { accounts } from "@/db/schema";
+import { bankAccounts } from "@/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
-
-export type Account = Awaited<ReturnType<typeof getAccounts>>["data"][number];
+export type BankAccount = Awaited<
+  ReturnType<typeof getAccounts>
+>["data"][number];
 
 // TODO: Move to actions, leverage auth middleware chain
 export async function getAccounts() {
@@ -18,11 +19,11 @@ export async function getAccounts() {
 
   let data = await db
     .select({
-      id: accounts.id,
-      name: accounts.name,
+      id: bankAccounts.id,
+      name: bankAccounts.name,
     })
-    .from(accounts)
-    .where(eq(accounts.userId, auth.id));
+    .from(bankAccounts)
+    .where(eq(bankAccounts.userId, auth.id));
 
   return { data };
 }
@@ -39,11 +40,11 @@ export async function getAccount(id?: string) {
 
   let [data] = await db
     .select({
-      id: accounts.id,
-      name: accounts.name,
+      id: bankAccounts.id,
+      name: bankAccounts.name,
     })
-    .from(accounts)
-    .where(and(eq(accounts.id, id), eq(accounts.userId, auth.id)));
+    .from(bankAccounts)
+    .where(and(eq(bankAccounts.id, id), eq(bankAccounts.userId, auth.id)));
 
   return { data };
 }

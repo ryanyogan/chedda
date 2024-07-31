@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/drizzle";
-import { accounts, categories, transactions } from "@/db/schema";
+import { bankAccounts, categories, transactions } from "@/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { parse, subDays } from "date-fns";
 import { and, desc, eq, gte, lte } from "drizzle-orm";
@@ -35,16 +35,16 @@ export async function getTransactions({
       payee: transactions.payee,
       amount: transactions.amount,
       notes: transactions.notes,
-      account: accounts.name,
+      account: bankAccounts.name,
       accountId: transactions.accountId,
     })
     .from(transactions)
-    .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+    .innerJoin(bankAccounts, eq(transactions.accountId, bankAccounts.id))
     .leftJoin(categories, eq(transactions.categoryId, categories.id))
     .where(
       and(
         accountId ? eq(transactions.accountId, accountId) : undefined,
-        eq(accounts.userId, auth.id),
+        eq(bankAccounts.userId, auth.id),
         gte(transactions.date, startDate),
         lte(transactions.date, endDate)
       )
@@ -71,8 +71,8 @@ export async function getTransaction({ id }: { id: string }) {
       accountId: transactions.accountId,
     })
     .from(transactions)
-    .innerJoin(accounts, eq(transactions.accountId, accounts.id))
-    .where(and(eq(transactions.id, id), eq(accounts.userId, auth.id)));
+    .innerJoin(bankAccounts, eq(transactions.accountId, bankAccounts.id))
+    .where(and(eq(transactions.id, id), eq(bankAccounts.userId, auth.id)));
 
   return { data };
 }
